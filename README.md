@@ -6,6 +6,8 @@ A Claude Code mod that ends Claude's work reports with three colored status boxe
 - **Not done**: red
 - **Decision needed**: yellow
 
+![A Claude reply ending with the Done, Not done and Decision needed boxes](docs/screenshot.png)
+
 Each box has a rounded frame and a label tab on top. It works in the Claude desktop app's Code tab, in VS Code and on mobile. In the terminal the boxes are drawn with box-drawing characters.
 
 ## What it does
