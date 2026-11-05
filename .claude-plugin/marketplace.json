@@ -1,0 +1,13 @@
+{
+  "name": "status-blocks",
+  "owner": {
+    "name": "Eugeene1337"
+  },
+  "plugins": [
+    {
+      "name": "status-blocks",
+      "source": "./"
+    }
+  ],
+  "description": "The status-blocks mod for Claude Code"
+}
