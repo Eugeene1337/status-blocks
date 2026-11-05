@@ -13,8 +13,8 @@ type Segment =
 
 /**
  * The three headings in each language, in the order done / not done /
- * decision needed. The first triple per language is what the model is told to
- * write; extra spellings after `|` are also recognized.
+ * decision needed. The first spelling per language is the one the CLAUDE.md
+ * format rule lists; extra spellings after `|` are also recognized.
  */
 const HEADINGS: { lang: string; done: string; notDone: string; decision: string }[] = [
   { lang: 'English', done: 'Done|Completed', notDone: 'Not done|Not completed', decision: 'Decision needed|Needs decision|Decision required' },
@@ -160,37 +160,7 @@ export function parse(text: string): Segment[] {
   return out
 }
 
-// The instruction that makes the model write the sections this mod draws, so
-// the mod works in every project without a CLAUDE.md or memory rule. Fixed
-// text: a section that changed mid-thread would cost the prompt cache.
-const first = (names: string) => names.split('|')[0]
-const FORMAT_RULE = {
-  id: 'status-blocks:format',
-  scope: 'session',
-  text: [
-    '# Status sections',
-    'When a reply reports on work (something was changed, checked or left open), end it with up to three sections,',
-    'each a Markdown `###` heading followed by a short list (one fact per item), leaving out a section that would be',
-    'empty, with nothing after them:',
-    '1. done: what is now done and verified (bullets);',
-    '2. not done: what was not done, not verified, or failed (bullets);',
-    '3. decision needed: each decision or action the user has to take (numbered).',
-    '',
-    "Write the headings in the reply's language, word for word from this table (done / not done / decision needed);",
-    'for a language not listed use the English ones:',
-    ...HEADINGS.map(h => `- ${h.lang}: ${first(h.done)} / ${first(h.notDone)} / ${first(h.decision)}`),
-    '',
-    'The explanation goes above the sections. A plain answer to a question or a conversational reply needs no sections.',
-    'The interface draws these headings as colored boxes, so keep them exact.',
-  ].join('\n'),
-} as const
-
 export const register: Register = on => {
-  on('prompt.compose', async ($, e, next) => {
-    const { sections } = await next(e)
-    return { sections: [...sections, FORMAT_RULE] }
-  })
-
   on('ui.render', { component: 'AssistantMessage' }, ($, e, next) => {
     const segments = parse(e.props.text)
     if (!segments.some(s => s.type === 'section')) return next(e)

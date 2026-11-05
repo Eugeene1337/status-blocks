@@ -12,7 +12,19 @@ Each box has a rounded frame and a label tab on top. It works in the Claude desk
 
 ## What it does
 
-1. It adds a short instruction to Claude's system prompt. When a reply reports on work, Claude ends it with up to three `###` sections: done, not done and decision needed. Each section is a short list, and empty sections are left out.
+1. The format of the sections comes from a rule in a `CLAUDE.md`: your user one (`~/.claude/CLAUDE.md`, every project) or a project's own. With it, when a reply reports on work, Claude ends it with up to three `###` sections: done, not done and decision needed. Each section is a short list, and empty sections are left out. A short rule is enough:
+
+   ```markdown
+   # Status sections
+   When a reply reports on work, end it with up to three sections, each a `###` heading
+   followed by a short list, leaving out empty ones, with nothing after them:
+   Done (what is done and verified), Not done (what was not done or failed),
+   Decision needed (numbered decisions or actions for the user).
+   Write the headings in the reply's language, word for word from the table in the
+   status-blocks README; for a language not listed use the English ones.
+   ```
+
+   The mod cannot add this rule to Claude's system prompt itself: Claude Code's built-in `cc-plugin-sec-default` plugin runs first and does not let user plugins change the system prompt.
 2. It redraws every assistant reply. A section that opens with one of those headings (or a bold line such as `**Done:**`) becomes a colored box, with the heading as the tab's label. The rest of the reply is drawn as usual. A reply without these sections is not touched.
 
 Only the drawing changes. The stored message stays plain Markdown, so the transcript reads normally without the mod.

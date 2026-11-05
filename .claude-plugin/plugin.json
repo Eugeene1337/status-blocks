@@ -1,5 +1,5 @@
 {
   "name": "status-blocks",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Draws the Done / Not done / Decision needed sections of Claude replies as colored boxes, in many languages"
 }
